@@ -1,43 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Monster Battle Classroom</title>
-  <meta charset="UTF-8">
+  <title>🔥 Monster Battle Classroom 🔥</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body style="font-family: Arial; text-align:center; background:#f4f4f4;">
+
+<body>
 
 <h1>🔥 MONSTER BATTLE CLASSROOM 🔥</h1>
 
-<!-- LOGIN -->
-<div id="loginScreen">
-  <h2>Enter Your Name</h2>
-  <input type="text" id="playerName" placeholder="Your name">
-  <button onclick="startGame()">Start Game</button>
+<h2>Score: <span id="score">0</span></h2>
+<h2>Time Left: <span id="time">30</span></h2>
+
+<h3>Player HP</h3>
+<div class="hp-bar">
+  <div id="playerHP" class="player"></div>
 </div>
 
-<!-- GAME -->
-<div id="gameScreen" style="display:none;">
-  <h2>Score: <span id="score">0</span></h2>
-  <h3>Time Left: <span id="timer">10</span></h3>
-
-  <p>Player HP</p>
-  <div style="background:#ddd;width:80%;margin:auto;">
-    <div id="playerHP" style="background:green;height:20px;width:100%;"></div>
-  </div>
-
-  <p>Monster HP</p>
-  <div style="background:#ddd;width:80%;margin:auto;">
-    <div id="monsterHP" style="background:red;height:20px;width:100%;"></div>
-  </div>
-
-  <h3 id="question"></h3>
-  <div id="answers"></div>
+<h3>Monster HP</h3>
+<div class="hp-bar">
+  <div id="monsterHP" class="monster"></div>
 </div>
+
+<hr>
+
+<div id="question">Question here</div>
+<div id="answers"></div>
+
+<br>
+<button onclick="restartGame()">Restart Game</button>
 
 <!-- LEADERBOARD -->
 <div id="leaderboardScreen" style="display:none;">
   <h2>🏆 Leaderboard</h2>
-  <ul id="leaderboardList" style="list-style:none;padding:0;"></ul>
+  <ul id="leaderboardList"></ul>
   <button onclick="resetLeaderboard()">Reset Leaderboard</button>
   <br><br>
   <button onclick="location.reload()">Play Again</button>
