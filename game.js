@@ -1,167 +1,112 @@
-let playerName = "";
 let score = 0;
+let timeLeft = 30;
 let playerHP = 100;
 let monsterHP = 100;
+let currentQuestion = 0;
 let timer;
-let timeLeft = 10;
-let usedQuestions = [];
 
-const loginScreen = document.getElementById("loginScreen");
-const gameScreen = document.getElementById("gameScreen");
+const scoreEl = document.getElementById("score");
+const timeEl = document.getElementById("time");
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const playerHPEl = document.getElementById("playerHP");
+const monsterHPEl = document.getElementById("monsterHP");
 const leaderboardScreen = document.getElementById("leaderboardScreen");
-
-const playerNameInput = document.getElementById("playerName");
-const questionElement = document.getElementById("question");
-const answersElement = document.getElementById("answers");
-const scoreElement = document.getElementById("score");
-const timerElement = document.getElementById("timer");
-const playerHPBar = document.getElementById("playerHP");
-const monsterHPBar = document.getElementById("monsterHP");
 const leaderboardList = document.getElementById("leaderboardList");
 
 function startGame() {
-  playerName = playerNameInput.value.trim();
-  if (playerName === "") {
-    alert("Please enter your name!");
-    return;
-  }
-
-  loginScreen.style.display = "none";
-  gameScreen.style.display = "block";
-
-  resetGame();
-  loadQuestion();
-}
-
-function resetGame() {
-  score = 0;
-  playerHP = 100;
-  monsterHP = 100;
-  usedQuestions = [];
-  updateUI();
-}
-
-function loadQuestion() {
-  if (usedQuestions.length === questions.length) {
-    endGame(true);
-    return;
-  }
-
-  let index;
-  do {
-    index = Math.floor(Math.random() * questions.length);
-  } while (usedQuestions.includes(index));
-
-  usedQuestions.push(index);
-
-  const currentQuestion = questions[index];
-  questionElement.textContent = currentQuestion.question;
-  answersElement.innerHTML = "";
-
-  currentQuestion.answers.forEach(answer => {
-    const button = document.createElement("button");
-    button.textContent = answer.text;
-    button.style.display = "block";
-    button.style.margin = "10px auto";
-    button.onclick = () => selectAnswer(answer.correct);
-    answersElement.appendChild(button);
-  });
-
+  showQuestion();
   startTimer();
 }
 
 function startTimer() {
-  timeLeft = 10;
-  timerElement.textContent = timeLeft;
-
-  clearInterval(timer);
   timer = setInterval(() => {
     timeLeft--;
-    timerElement.textContent = timeLeft;
+    timeEl.textContent = timeLeft;
 
     if (timeLeft <= 0) {
-      clearInterval(timer);
-      damagePlayer();
-      loadQuestion();
+      endGame();
     }
   }, 1000);
 }
 
-function selectAnswer(correct) {
-  clearInterval(timer);
+function showQuestion() {
+  const q = questions[currentQuestion];
+  questionEl.textContent = q.question;
+  answersEl.innerHTML = "";
 
+  q.answers.forEach(answer => {
+    const btn = document.createElement("button");
+    btn.textContent = answer.text;
+    btn.onclick = () => selectAnswer(answer.correct);
+    answersEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(correct) {
   if (correct) {
     score += 10;
-    damageMonster();
+    monsterHP -= 20;
   } else {
-    damagePlayer();
+    playerHP -= 20;
   }
 
   updateUI();
 
-  if (playerHP <= 0) {
-    endGame(false);
-    return;
+  currentQuestion++;
+  if (currentQuestion >= questions.length) {
+    currentQuestion = 0;
   }
 
-  if (monsterHP <= 0) {
-    monsterHP = 100;
+  if (playerHP <= 0 || monsterHP <= 0) {
+    endGame();
+  } else {
+    showQuestion();
   }
-
-  setTimeout(loadQuestion, 800);
-}
-
-function damagePlayer() {
-  playerHP -= 20;
-}
-
-function damageMonster() {
-  monsterHP -= 20;
 }
 
 function updateUI() {
-  scoreElement.textContent = score;
-  playerHPBar.style.width = playerHP + "%";
-  monsterHPBar.style.width = monsterHP + "%";
+  scoreEl.textContent = score;
+  playerHPEl.style.width = playerHP + "%";
+  monsterHPEl.style.width = monsterHP + "%";
 }
 
-function endGame(win) {
+function endGame() {
   clearInterval(timer);
+  questionEl.style.display = "none";
+  answersEl.style.display = "none";
+  leaderboardScreen.style.display = "block";
+
   saveScore();
-  alert(win ? "YOU WIN!" : "GAME OVER!");
-  gameScreen.style.display = "none";
-  showLeaderboard();
+  loadLeaderboard();
+}
+
+function restartGame() {
+  location.reload();
 }
 
 function saveScore() {
-  let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-
-  leaderboard.push({
-    name: playerName,
-    score: score,
-    date: new Date().toLocaleDateString()
-  });
-
-  leaderboard.sort((a, b) => b.score - a.score);
-  leaderboard = leaderboard.slice(0, 10);
-
-  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+  let scores = JSON.parse(localStorage.getItem("monsterScores")) || [];
+  scores.push(score);
+  scores.sort((a, b) => b - a);
+  scores = scores.slice(0, 5);
+  localStorage.setItem("monsterScores", JSON.stringify(scores));
 }
 
-function showLeaderboard() {
-  leaderboardScreen.style.display = "block";
+function loadLeaderboard() {
+  let scores = JSON.parse(localStorage.getItem("monsterScores")) || [];
   leaderboardList.innerHTML = "";
 
-  let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-
-  leaderboard.forEach(player => {
+  scores.forEach((s, index) => {
     const li = document.createElement("li");
-    li.textContent = `${player.name} - ${player.score} (${player.date})`;
+    li.textContent = `${index + 1}. ${s} points`;
     leaderboardList.appendChild(li);
   });
 }
 
 function resetLeaderboard() {
-  localStorage.removeItem("leaderboard");
-  location.reload();
+  localStorage.removeItem("monsterScores");
+  loadLeaderboard();
 }
+
+startGame();
