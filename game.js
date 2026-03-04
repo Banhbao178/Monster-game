@@ -1,13 +1,9 @@
-// ====== MONSTER BATTLE 2.0 ======
-
 let playerName = "";
 let score = 0;
 let playerHP = 100;
 let monsterHP = 100;
-let currentQuestionIndex = 0;
 let timer;
 let timeLeft = 10;
-
 let usedQuestions = [];
 
 const loginScreen = document.getElementById("loginScreen");
@@ -22,8 +18,6 @@ const timerElement = document.getElementById("timer");
 const playerHPBar = document.getElementById("playerHP");
 const monsterHPBar = document.getElementById("monsterHP");
 const leaderboardList = document.getElementById("leaderboardList");
-
-// ===== LOGIN =====
 
 function startGame() {
   playerName = playerNameInput.value.trim();
@@ -47,36 +41,34 @@ function resetGame() {
   updateUI();
 }
 
-// ===== QUESTIONS =====
-
 function loadQuestion() {
   if (usedQuestions.length === questions.length) {
     endGame(true);
     return;
   }
 
+  let index;
   do {
-    currentQuestionIndex = Math.floor(Math.random() * questions.length);
-  } while (usedQuestions.includes(currentQuestionIndex));
+    index = Math.floor(Math.random() * questions.length);
+  } while (usedQuestions.includes(index));
 
-  usedQuestions.push(currentQuestionIndex);
+  usedQuestions.push(index);
 
-  const currentQuestion = questions[currentQuestionIndex];
+  const currentQuestion = questions[index];
   questionElement.textContent = currentQuestion.question;
-
   answersElement.innerHTML = "";
 
-  currentQuestion.answers.forEach((answer, index) => {
+  currentQuestion.answers.forEach(answer => {
     const button = document.createElement("button");
     button.textContent = answer.text;
+    button.style.display = "block";
+    button.style.margin = "10px auto";
     button.onclick = () => selectAnswer(answer.correct);
     answersElement.appendChild(button);
   });
 
   startTimer();
 }
-
-// ===== TIMER =====
 
 function startTimer() {
   timeLeft = 10;
@@ -94,8 +86,6 @@ function startTimer() {
     }
   }, 1000);
 }
-
-// ===== ANSWER =====
 
 function selectAnswer(correct) {
   clearInterval(timer);
@@ -115,22 +105,18 @@ function selectAnswer(correct) {
   }
 
   if (monsterHP <= 0) {
-    monsterHP = 100; // Boss reset
+    monsterHP = 100;
   }
 
   setTimeout(loadQuestion, 800);
 }
 
-// ===== DAMAGE SYSTEM =====
-
 function damagePlayer() {
   playerHP -= 20;
-  updateUI();
 }
 
 function damageMonster() {
   monsterHP -= 20;
-  updateUI();
 }
 
 function updateUI() {
@@ -139,20 +125,13 @@ function updateUI() {
   monsterHPBar.style.width = monsterHP + "%";
 }
 
-// ===== END GAME =====
-
 function endGame(win) {
   clearInterval(timer);
-
   saveScore();
-
   alert(win ? "YOU WIN!" : "GAME OVER!");
-
   gameScreen.style.display = "none";
   showLeaderboard();
 }
-
-// ===== LEADERBOARD =====
 
 function saveScore() {
   let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
@@ -184,5 +163,5 @@ function showLeaderboard() {
 
 function resetLeaderboard() {
   localStorage.removeItem("leaderboard");
-  showLeaderboard();
+  location.reload();
 }
