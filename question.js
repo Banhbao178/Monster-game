@@ -1,21 +1,29 @@
 const questions = [
   {
-    question: "Yesterday I ___ to school.",
-    options: ["go", "went", "gone", "going"],
-    correct: 1
+    question: "2 + 2 = ?",
+    answers: [
+      { text: "3", correct: false },
+      { text: "4", correct: true },
+      { text: "5", correct: false },
+      { text: "6", correct: false }
+    ]
   },
   {
-    question: "She ___ playing now.",
-    options: ["is", "are", "was", "be"],
-    correct: 0
+    question: "Capital of Vietnam?",
+    answers: [
+      { text: "Hanoi", correct: true },
+      { text: "HCM", correct: false },
+      { text: "Bangkok", correct: false },
+      { text: "Tokyo", correct: false }
+    ]
   },
   {
-    question: "We ___ dinner at 7 yesterday.",
-    options: ["eat", "ate", "eaten", "eating"],
-    correct: 1
+    question: "5 x 3 = ?",
+    answers: [
+      { text: "15", correct: true },
+      { text: "10", correct: false },
+      { text: "20", correct: false },
+      { text: "8", correct: false }
+    ]
   }
 ];
-
-function getRandomQuestion() {
-  return questions[Math.floor(Math.random() * questions.length)];
-}
