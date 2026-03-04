@@ -1,28 +1,31 @@
 body {
-  font-family: Arial;
-  background: #121212;
-  color: white;
   text-align: center;
-}
-
-input, button {
-  padding: 10px;
-  margin: 10px;
-  font-size: 16px;
-}
-
-.monster {
-  font-size: 100px;
+  font-family: Arial;
+  background: #f4f4f4;
 }
 
 .hp-bar {
-  width: 300px;
-  height: 20px;
-  background: red;
+  width: 80%;
+  height: 30px;
+  background: #ccc;
   margin: 10px auto;
 }
 
-.hp {
+.player {
   height: 100%;
-  background: lime;
+  width: 100%;
+  background: green;
+}
+
+.monster {
+  height: 100%;
+  width: 100%;
+  background: red;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  cursor: pointer;
 }
