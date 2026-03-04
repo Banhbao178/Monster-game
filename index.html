@@ -1,42 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Monster School Login</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Monster Battle Classroom</title>
+  <meta charset="UTF-8">
 </head>
-<body>
+<body style="font-family: Arial; text-align:center; background:#f4f4f4;">
 
-<h1>Welcome to Monster School</h1>
+<h1>🔥 MONSTER BATTLE CLASSROOM 🔥</h1>
 
+<!-- LOGIN -->
 <div id="loginScreen">
   <h2>Enter Your Name</h2>
   <input type="text" id="playerName" placeholder="Your name">
   <button onclick="startGame()">Start Game</button>
 </div>
 
-<script>
-function login() {
-  let name = document.getElementById("username").value;
-  if (name.trim() === "") {
-    alert("Please enter your name!");
-    return;
-  }
+<!-- GAME -->
+<div id="gameScreen" style="display:none;">
+  <h2>Score: <span id="score">0</span></h2>
+  <h3>Time Left: <span id="timer">10</span></h3>
 
-  if (!localStorage.getItem(name)) {
-    let studentData = {
-      xp: 0,
-      gold: 0,
-      monsterHP: 100,
-      level: 1,
-      streak: 0
-    };
-    localStorage.setItem(name, JSON.stringify(studentData));
-  }
+  <p>Player HP</p>
+  <div style="background:#ddd;width:80%;margin:auto;">
+    <div id="playerHP" style="background:green;height:20px;width:100%;"></div>
+  </div>
 
-  localStorage.setItem("currentUser", name);
-  window.location.href = "dashboard.html";
-}
-</script>
+  <p>Monster HP</p>
+  <div style="background:#ddd;width:80%;margin:auto;">
+    <div id="monsterHP" style="background:red;height:20px;width:100%;"></div>
+  </div>
+
+  <h3 id="question"></h3>
+  <div id="answers"></div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="leaderboardScreen" style="display:none;">
+  <h2>🏆 Leaderboard</h2>
+  <ul id="leaderboardList" style="list-style:none;padding:0;"></ul>
+  <button onclick="resetLeaderboard()">Reset Leaderboard</button>
+  <br><br>
+  <button onclick="location.reload()">Play Again</button>
+</div>
+
+<script src="questions.js"></script>
+<script src="game.js"></script>
 
 </body>
 </html>
