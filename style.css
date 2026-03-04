@@ -1,31 +1,70 @@
 body {
   text-align: center;
   font-family: Arial;
-  background: #f4f4f4;
+  background: linear-gradient(to bottom, #222, #444);
+  color: white;
+}
+
+h1 {
+  font-size: 40px;
 }
 
 .hp-bar {
   width: 80%;
   height: 30px;
-  background: #ccc;
+  background: #555;
   margin: 10px auto;
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .player {
   height: 100%;
   width: 100%;
-  background: green;
+  background: limegreen;
+  transition: width 0.3s ease;
 }
 
 .monster {
   height: 100%;
   width: 100%;
-  background: red;
+  background: crimson;
+  transition: width 0.3s ease;
 }
 
 button {
-  padding: 10px 20px;
-  margin: 5px;
+  padding: 12px 25px;
+  margin: 8px;
   font-size: 16px;
   cursor: pointer;
+  border-radius: 10px;
+  border: none;
+  background: orange;
+  font-weight: bold;
+  transition: transform 0.1s;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+
+.flash {
+  animation: flash 0.3s;
+}
+
+@keyframes flash {
+  0% { background: white; }
+  100% { background: inherit; }
+}
+
+.shake {
+  animation: shake 0.3s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
 }
