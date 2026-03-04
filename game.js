@@ -1,3 +1,6 @@
+let xp = parseInt(localStorage.getItem("xp")) || 0;
+let shield = false;
+let skillReady = false;
 let score = 0;
 let timeLeft = 30;
 let playerHP = 100;
@@ -45,7 +48,7 @@ function selectAnswer(correct) {
 
   const damage = 15 + level * 2;
 
-  if (correct) {
+  if (correct) {document.getElementById("attackSound").play();
     score += 10;
     monsterHP -= damage;
 
@@ -57,7 +60,7 @@ function selectAnswer(correct) {
       monsterHPEl.classList.remove("hit");
     }, 400);
 
-  } else {
+  } else {document.getElementById("hitSound").play(); 
     playerHP -= 15;
 
     playerHPEl.classList.add("shake-strong");
