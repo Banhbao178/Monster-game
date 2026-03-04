@@ -2,6 +2,7 @@ let score = 0;
 let timeLeft = 30;
 let playerHP = 100;
 let monsterHP = 100;
+let level = 1;
 let currentQuestion = 0;
 let timer;
 
@@ -31,8 +32,8 @@ function startTimer() {
 }
 
 function showQuestion() {
-  const q = questions[currentQuestion];
-  questionEl.textContent = q.question;
+  const q = questions[Math.floor(Math.random() * questions.length)];
+  questionEl.textContent = `Level ${level} - ${q.question}`;
   answersEl.innerHTML = "";
 
   q.answers.forEach(answer => {
@@ -47,22 +48,33 @@ function selectAnswer(correct) {
   if (correct) {
     score += 10;
     monsterHP -= 20;
+
+    monsterHPEl.classList.add("shake");
+    setTimeout(() => monsterHPEl.classList.remove("shake"), 300);
+
   } else {
     playerHP -= 20;
+
+    playerHPEl.classList.add("flash");
+    setTimeout(() => playerHPEl.classList.remove("flash"), 300);
   }
 
   updateUI();
 
-  currentQuestion++;
-  if (currentQuestion >= questions.length) {
-    currentQuestion = 0;
-  }
-
-  if (playerHP <= 0 || monsterHP <= 0) {
+  if (playerHP <= 0) {
     endGame();
+  } else if (monsterHP <= 0) {
+    nextLevel();
   } else {
     showQuestion();
   }
+}
+
+function nextLevel() {
+  level++;
+  monsterHP = 100 + (level - 1) * 20;
+  playerHP = Math.min(playerHP + 20, 100);
+  showQuestion();
 }
 
 function updateUI() {
