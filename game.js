@@ -3,7 +3,6 @@ let timeLeft = 30;
 let playerHP = 100;
 let monsterHP = 100;
 let level = 1;
-let currentQuestion = 0;
 let timer;
 
 const scoreEl = document.getElementById("score");
@@ -25,9 +24,7 @@ function startTimer() {
     timeLeft--;
     timeEl.textContent = timeLeft;
 
-    if (timeLeft <= 0) {
-      endGame();
-    }
+    if (timeLeft <= 0) endGame();
   }, 1000);
 }
 
@@ -45,18 +42,31 @@ function showQuestion() {
 }
 
 function selectAnswer(correct) {
+
+  const damage = 15 + level * 2;
+
   if (correct) {
     score += 10;
-    monsterHP -= 20;
+    monsterHP -= damage;
 
-    monsterHPEl.classList.add("shake");
-    setTimeout(() => monsterHPEl.classList.remove("shake"), 300);
+    monsterHPEl.classList.add("shake-strong");
+    monsterHPEl.classList.add("hit");
+
+    setTimeout(() => {
+      monsterHPEl.classList.remove("shake-strong");
+      monsterHPEl.classList.remove("hit");
+    }, 400);
 
   } else {
-    playerHP -= 20;
+    playerHP -= 15;
 
-    playerHPEl.classList.add("flash");
-    setTimeout(() => playerHPEl.classList.remove("flash"), 300);
+    playerHPEl.classList.add("shake-strong");
+    playerHPEl.classList.add("hit");
+
+    setTimeout(() => {
+      playerHPEl.classList.remove("shake-strong");
+      playerHPEl.classList.remove("hit");
+    }, 400);
   }
 
   updateUI();
@@ -72,15 +82,32 @@ function selectAnswer(correct) {
 
 function nextLevel() {
   level++;
-  monsterHP = 100 + (level - 1) * 20;
+
+  // Boss mỗi 3 level
+  if (level % 3 === 0) {
+    monsterHP = 200 + level * 20;
+    showLevelUp("🔥 BOSS LEVEL 🔥");
+  } else {
+    monsterHP = 100 + level * 20;
+    showLevelUp("⚡ LEVEL UP!");
+  }
+
+  // hồi máu nhẹ
   playerHP = Math.min(playerHP + 20, 100);
-  showQuestion();
+
+  updateUI();
+  setTimeout(showQuestion, 800);
+}
+
+function showLevelUp(text) {
+  questionEl.innerHTML = `<div class="level-up">${text}</div>`;
+  answersEl.innerHTML = "";
 }
 
 function updateUI() {
   scoreEl.textContent = score;
-  playerHPEl.style.width = playerHP + "%";
-  monsterHPEl.style.width = monsterHP + "%";
+  playerHPEl.style.width = Math.max(playerHP, 0) + "%";
+  monsterHPEl.style.width = Math.max(monsterHP, 0) + "%";
 }
 
 function endGame() {
@@ -91,10 +118,6 @@ function endGame() {
 
   saveScore();
   loadLeaderboard();
-}
-
-function restartGame() {
-  location.reload();
 }
 
 function saveScore() {
