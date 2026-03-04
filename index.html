@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Monster School Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Welcome to Monster School</h1>
+
+<input type="text" id="username" placeholder="Enter your name">
+<button onclick="login()">Start Learning</button>
+
+<script>
+function login() {
+  let name = document.getElementById("username").value;
+  if (name.trim() === "") {
+    alert("Please enter your name!");
+    return;
+  }
+
+  if (!localStorage.getItem(name)) {
+    let studentData = {
+      xp: 0,
+      gold: 0,
+      monsterHP: 100,
+      level: 1,
+      streak: 0
+    };
+    localStorage.setItem(name, JSON.stringify(studentData));
+  }
+
+  localStorage.setItem("currentUser", name);
+  window.location.href = "dashboard.html";
+}
+</script>
+
+</body>
+</html>
