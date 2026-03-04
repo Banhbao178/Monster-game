@@ -1,21 +1,23 @@
 body {
   text-align: center;
   font-family: Arial;
-  background: linear-gradient(to bottom, #222, #444);
+  background: linear-gradient(to bottom, #111, #333);
   color: white;
 }
 
 h1 {
   font-size: 40px;
+  margin-top: 20px;
 }
 
 .hp-bar {
   width: 80%;
   height: 30px;
   background: #555;
-  margin: 10px auto;
+  margin: 15px auto;
   border-radius: 20px;
   overflow: hidden;
+  position: relative;
 }
 
 .player {
@@ -48,23 +50,40 @@ button:hover {
   transform: scale(1.1);
 }
 
-.flash {
-  animation: flash 0.3s;
+/* ====== RUNG MẠNH ====== */
+
+.shake-strong {
+  animation: shakeStrong 0.4s;
 }
 
-@keyframes flash {
-  0% { background: white; }
-  100% { background: inherit; }
-}
-
-.shake {
-  animation: shake 0.3s;
-}
-
-@keyframes shake {
+@keyframes shakeStrong {
   0% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
+  15% { transform: translateX(-10px); }
+  30% { transform: translateX(10px); }
+  45% { transform: translateX(-8px); }
+  60% { transform: translateX(8px); }
   75% { transform: translateX(-5px); }
   100% { transform: translateX(0); }
+}
+
+/* Flash đỏ khi bị đánh */
+.hit {
+  animation: hitFlash 0.3s;
+}
+
+@keyframes hitFlash {
+  0% { filter: brightness(2); }
+  100% { filter: brightness(1); }
+}
+
+/* Level up effect */
+.level-up {
+  font-size: 28px;
+  color: yellow;
+  animation: pop 0.5s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
