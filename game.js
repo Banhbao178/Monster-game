@@ -16,7 +16,31 @@ const playerHPEl = document.getElementById("playerHP");
 const monsterHPEl = document.getElementById("monsterHP");
 const leaderboardScreen = document.getElementById("leaderboardScreen");
 const leaderboardList = document.getElementById("leaderboardList");
+function useSkill() {
 
+  if (level < 5) {
+    alert("Reach Level 5 to unlock this skill!");
+    return;
+  }
+
+  monsterHP -= 40;
+  updateUI();
+
+  if (monsterHP <= 0) {
+    nextLevel();
+  }
+}
+
+function useShield() {
+
+  if (level < 3) {
+    alert("Reach Level 3 to unlock Shield!");
+    return;
+  }
+
+  shield = true;
+  alert("Shield Activated! Next wrong answer won't hurt you.");
+}
 function startGame() {
   showQuestion();
   startTimer();
@@ -61,8 +85,11 @@ function selectAnswer(correct) {
     }, 400);
 
   } else {document.getElementById("hitSound").play(); 
-    playerHP -= 15;
-
+if (shield) {
+  shield = false;
+} else {
+  playerHP -= 15;
+}
     playerHPEl.classList.add("shake-strong");
     playerHPEl.classList.add("hit");
 
